@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
 import car.HelloWorldResource;
+import car.TestResource;
 
 import com.example.rs.JaxRsApiApplication;
 import com.example.rs.PeopleRestService;
@@ -32,8 +33,9 @@ public class AppConfig {
 		JAXRSServerFactoryBean factory = RuntimeDelegate.getInstance().createEndpoint( jaxRsApiApplication(), JAXRSServerFactoryBean.class );
 		
 		List<Object> serviceBeans = new ArrayList<Object>();
-//		serviceBeans.add(peopleRestService());
+		serviceBeans.add(peopleRestService());
 		serviceBeans.add(new HelloWorldResource());
+		serviceBeans.add(new TestResource());
 		
 		factory.setServiceBeans(serviceBeans);
 		factory.setAddress( "/" + factory.getAddress() );

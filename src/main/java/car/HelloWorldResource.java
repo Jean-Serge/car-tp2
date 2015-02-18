@@ -21,12 +21,14 @@ public class HelloWorldResource {
 		return "<h1>Hello World</h1>";
 	}
 
+	// helloworld/book/numeroISBN
 	 @GET
 	 @Path("/book/{isbn}")
 	 public String getBook( @PathParam("isbn") String isbn ) {
 		 return "Book: "+isbn;		 
 	 }
 
+	 // helloworld/something/stuff
 	 @GET
 	 @Path("{var: .*}/stuff")
 	 public String getStuff( @PathParam("var") String stuff ) {
