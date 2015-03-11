@@ -2,6 +2,7 @@ package car;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
 import javax.ws.rs.GET;
@@ -30,7 +31,13 @@ public class TestResource {
 		System.out.println(client.getReplyString());
 		client.login("user", "mdp");
 		System.out.println(client.getReplyCode());
-		
+
+		ServerSocket serv = new ServerSocket(60000);
+		client.port(InetAddress.getLocalHost(), 60000);
+		client.list();
+		String[] ss = client.getReplyStrings();
+		for(String s : ss)
+			System.out.println(s);
 //		ServerSocket serv = new ServerSocket((171 * 256) + 26);
 //		bw.write("PORT 127,0,0,1,171,26\r\n".getBytes());
 //		System.out.println("Attente de connexion.");
@@ -48,6 +55,7 @@ public class TestResource {
 //		
 //		serv.close();
 		
+		serv.close();
 		client.disconnect();
 		return "Bonjour";
 	}
