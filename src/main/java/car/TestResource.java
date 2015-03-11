@@ -1,12 +1,7 @@
 package car;
 
-import java.io.BufferedReader;
-
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
 
 import javax.ws.rs.GET;
@@ -26,26 +21,34 @@ public class TestResource {
 	}
 
 	@GET
-	@Produces("application/octet-stream")
+//	@Produces("application/octet-stream")
 	@Path("/list")
 	public String testLectureOctet() throws UnknownHostException, IOException{
-		Socket s = new Socket(InetAddress.getLocalHost(), 2000);
-		DataOutputStream bw = new DataOutputStream(s.getOutputStream());
-		BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+		FTPClient client = new FTPClient();
+		client.configure(new FTPClientConfig());
+		client.connect(InetAddress.getLocalHost().getHostName(), 2000);
+		System.out.println(client.getReplyString());
+		client.login("user", "mdp");
+		System.out.println(client.getReplyCode());
 		
-		System.out.println(br.readLine());	
-		bw.write("USER user\r\n".getBytes());
-		System.out.println(br.readLine());
-		
-		bw.write("PASS mdp\r\n".getBytes());
-		System.out.println(br.readLine());
-		
-		bw.write("PORT 127,0,0,1,171,26\r\n".getBytes());
-		System.out.println(br.readLine());
+//		ServerSocket serv = new ServerSocket((171 * 256) + 26);
+//		bw.write("PORT 127,0,0,1,171,26\r\n".getBytes());
+//		System.out.println("Attente de connexion.");
+//		serv.accept();
+//		
+//		System.out.println("Connexion trouvée.");
+//		System.out.println(br.readLine());
 //		bw.write("LIST\r\n".getBytes());
-//		System.out.println(br.readLine());
-//		System.out.println(br.readLine());
-
+//		
+//		String ligne;
+//		System.out.println("LS : ");
+//		while(!(ligne = br.readLine()) .split(" ")[0].equals("226")){
+//			System.out.println(br.readLine());	
+//		}
+//		
+//		serv.close();
+		
+		client.disconnect();
 		return "Bonjour";
 	}
 }
