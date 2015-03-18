@@ -1,5 +1,8 @@
 package com.example.config;
 
+import java.io.IOException;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +38,18 @@ public class AppConfig {
 		List<Object> serviceBeans = new ArrayList<Object>();
 		serviceBeans.add(peopleRestService());
 		serviceBeans.add(new HelloWorldResource());
-		serviceBeans.add(new TestResource());
+		try {
+			serviceBeans.add(new TestResource());
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		factory.setServiceBeans(serviceBeans);
 		factory.setAddress( "/" + factory.getAddress() );
