@@ -1,7 +1,6 @@
 package car;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -9,7 +8,9 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -27,17 +28,51 @@ public class TestResource {
 		client.connect(InetAddress.getLocalHost().getHostName(), 2000);
 		// System.out.println("Réponse connexion : " + client.getReplyString());
 
-		client.login("user", "mdp");
+//		client.login("user", "mdp");
 		// System.out.println("Réponse authentification : " +
 	}
 
+	/**
+	 * Cette fonction affiche un formulaire de connexion sur la page d'accueil de 
+	 * l'application.
+	 * Les données du formulaires sont transmise à une page de login (voir fonction login)
+	 * 
+	 * @return le code html du formulaire à remplir
+	 */
 	@GET
 	@Produces("text/html")
 	public String sayHello() {
-		return "<h1>Test</h1>";
-
+		String html = "";
+		html += "<html><body>" +
+				"<h1>Bonjour</h1>" +
+				"<form action=login method=\"POST\">" +
+				"User : <input name=\"user\" type=\"text\"></br>" +
+				"Pass : <input name=\"pass\" type=\"password\"></br>" +
+				"<input type=\"submit\" type=\"send\" />" +
+				"</form>" +
+				"</body></html>";
+				
+		return html;
+		
 	}
 
+	/**
+	 * Envoi les informations de connexions au Serveur et affiche dans la page HTML le code correspondant.
+	 * 
+	 * @param user le nom d'utilisateur passé par le formulaire
+	 * @param pass le mot de passe
+	 * @return la valeur de retour du serveur
+	 * @throws IOException
+	 */
+	@POST
+	@Path("/login")
+	@Produces("text/html")
+	public String login(@FormParam("user") String user, @FormParam("pass") String pass) throws IOException{
+		client.login(user, pass);
+		
+		return client.getReplyString();
+	}
+	
 	/**
 	 * Cette fonction offre au client la possibilité de télécharger un fichier du serveur.
 	 * 
