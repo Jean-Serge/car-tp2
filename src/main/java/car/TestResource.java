@@ -2,6 +2,7 @@ package car;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,6 +22,13 @@ import org.apache.commons.net.ftp.*;
 public class TestResource {
 	private FTPClient client;
 
+	/**
+	 * Initialise la connexion au Serveur FTP.
+	 * 
+	 * @throws SocketException
+	 * @throws UnknownHostException
+	 * @throws IOException
+	 */
 	public TestResource() throws SocketException, UnknownHostException,
 			IOException {
 		client = new FTPClient();
@@ -28,8 +36,6 @@ public class TestResource {
 		client.connect(InetAddress.getLocalHost().getHostName(), 2000);
 		// System.out.println("Réponse connexion : " + client.getReplyString());
 
-//		client.login("user", "mdp");
-		// System.out.println("Réponse authentification : " +
 	}
 
 	/**
@@ -126,16 +132,16 @@ public class TestResource {
 		// Réception de la liste
 		client.list();
 
-		char c;
+		int c;
 		String liste = "";
 
 		// Lecture de la liste
-		while ((c = (char) is.read()) != -1) {
+		while ((c = is.read()) != -1) {
 			// On utilise un retour à la ligne HTML
-			if (c == '\n')
+			if ((char)c == '\n')
 				liste += "</br>";
 			else
-				liste += c;
+				liste += (char)c;
 		}
 
 		serv.close(); // Fermeture du serveur d'écoute inutile
