@@ -1,10 +1,8 @@
 package car;
 
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,10 +13,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
-import org.apache.commons.net.ftp.*;
-import org.eclipse.jetty.server.Response;
-import javax.ws.rs.core.Response.*; 
+import org.apache.commons.net.ftp.*; 
 @Path("/test")
 public class TestResource {
 	private FTPClient client;
@@ -32,8 +29,6 @@ public class TestResource {
 
 		client.login("user", "mdp");
 		// System.out.println("Réponse authentification : " +
-		// client.getReplyCode());
-
 	}
 
 	@GET
@@ -43,26 +38,38 @@ public class TestResource {
 
 	}
 
+	/**
+	 * Cette fonction offre au client la possibilité de télécharger un fichier du serveur.
+	 * 
+	 * @param file 
+	 * @return
+	 * @throws IOException
+	 */
 	@GET
 	@Produces("application/octet-stream")
 	@Path("/get/{file}")
-	public javax.ws.rs.core.Response getFile(@PathParam("file") String file) throws IOException {
+	public Response getFile(@PathParam("file") String file) throws IOException {
 		// Ouverture du socket d'écoute
+		
 		ServerSocket serv = new ServerSocket(60000);
 		client.port(InetAddress.getLocalHost(), 60000);
 		Socket socket = serv.accept();
-		InputStreamReader is = new InputStreamReader(socket.getInputStream());
 		
-		client.retr(file);
 		
-		System.out.println(client.getReplyCode());
-		System.out.println(client.getReplyCode());
+		int reply = client.retr(file);
+		System.out.println("1 " + client.getReplyCode());
+		if(reply != 125){
+			serv.close();
+			return Response.ok("Pas de chance, le fichier demandé n'est pas disponible.").build();
+		}
+		
+		client.getReply();
+		System.out.println("2 " + client.getReplyCode());
+		
+		Response r = Response.ok(socket.getInputStream()).build();
 		serv.close();
 		
-		if(client.getReplyCode() == 125)
-			return javax.ws.rs.core.Response.ok(socket.getInputStream()).build();
-		else 
-			return javax.ws.rs.core.Response.ok("Pas de chance, le fichier n'existe pas.").build();
+			return r;
 	}
 
 	/**
