@@ -20,5 +20,5 @@ Travail Réalisé
 + Implémentation de la commande FTP GET grâce à la méthode GET de HTTP
 + Implémentation de l'authentification FTP (USER + PASS) grâce à la méthode POST de HTTP
 
-
++ Début non-concluant d'implémentation de la commande RMD avec la méthode DELETE
 

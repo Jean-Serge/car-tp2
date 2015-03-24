@@ -2,13 +2,13 @@ package car;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -19,7 +19,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.net.ftp.*; 
 @Path("/test")
-public class TestResource {
+public class GatewayREST {
 	private FTPClient client;
 
 	/**
@@ -29,13 +29,12 @@ public class TestResource {
 	 * @throws UnknownHostException
 	 * @throws IOException
 	 */
-	public TestResource() throws SocketException, UnknownHostException,
+	public GatewayREST() throws SocketException, UnknownHostException,
 			IOException {
 		client = new FTPClient();
 		client.configure(new FTPClientConfig());
 		client.connect(InetAddress.getLocalHost().getHostName(), 2000);
 		// System.out.println("Réponse connexion : " + client.getReplyString());
-
 	}
 
 	/**
@@ -47,13 +46,13 @@ public class TestResource {
 	 */
 	@GET
 	@Produces("text/html")
-	public String sayHello() {
+	public String getHome() {
 		String html = "";
 		html += "<html><body>" +
 				"<h1>Bonjour</h1>" +
 				"<form action=login method=\"POST\">" +
-				"User : <input name=\"user\" type=\"text\"></br>" +
-				"Pass : <input name=\"pass\" type=\"password\"></br>" +
+				"User : <input name=\"user\" type=\"text\"/></br>" +
+				"Pass : <input name=\"pass\" type=\"password\"/></br>" +
 				"<input type=\"submit\" type=\"send\" />" +
 				"</form>" +
 				"</body></html>";
@@ -61,7 +60,47 @@ public class TestResource {
 		return html;
 		
 	}
+	
+	
+	/**
+	 * Affiche le formulaire permettantd e transmettre par le méthode DELETE
+	 * le nom du fichier à supprimer sur le serveur FTP.
+	 * 
+	 * @return le code html du formulaire
+	 */
+	@GET
+	@Path("/del")
+	@Produces("text/html")
+	public String formDel(){
+		String html = "";
+		html += "<html><body>" +
+				"<h1>Suppresion de fichier</h1>" +
+				"<form action=delete method=\"DELETE\">" +
+				"Fichier à supprimer : <input name=\"file\" type=\"text\"/></br>" +
+				"<input type=\"submit\" value=\"Delete\"/> " +
+				"</form>" +
+				"</html></body";
+		
+		return html;
+	}
 
+	/**
+	 * Méthode permettant de supprimer un fichier sur le serveur
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	@DELETE
+	@Path("/delete/{file}")
+	@Produces("text/html")
+	public String delete(@PathParam("file") String file) throws IOException{
+		System.out.println(file + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		client.rmd(file);
+		
+		return client.getReplyString();
+	}
+	
+	
 	/**
 	 * Envoi les informations de connexions au Serveur et affiche dans la page HTML le code correspondant.
 	 * 

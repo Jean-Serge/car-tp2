@@ -17,12 +17,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
-import car.HelloWorldResource;
-import car.TestResource;
-
+import car.GatewayREST;
 import com.example.rs.JaxRsApiApplication;
-import com.example.rs.PeopleRestService;
-import com.example.services.PeopleService;
 
 @Configuration
 public class AppConfig {	
@@ -36,10 +32,8 @@ public class AppConfig {
 		JAXRSServerFactoryBean factory = RuntimeDelegate.getInstance().createEndpoint( jaxRsApiApplication(), JAXRSServerFactoryBean.class );
 		
 		List<Object> serviceBeans = new ArrayList<Object>();
-		serviceBeans.add(peopleRestService());
-		serviceBeans.add(new HelloWorldResource());
 		try {
-			serviceBeans.add(new TestResource());
+			serviceBeans.add(new GatewayREST());
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,16 +54,6 @@ public class AppConfig {
 	@Bean 
 	public JaxRsApiApplication jaxRsApiApplication() {
 		return new JaxRsApiApplication();
-	}
-	
-	@Bean 
-	public PeopleRestService peopleRestService() {
-		return new PeopleRestService();
-	}
-	
-	@Bean 
-	public PeopleService peopleService() {
-		return new PeopleService();
 	}
 		
 	@Bean
