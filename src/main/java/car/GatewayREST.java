@@ -8,7 +8,6 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -60,41 +59,18 @@ public class GatewayREST {
 		return html;
 		
 	}
-	
-	
-	/**
-	 * Affiche le formulaire permettantd e transmettre par le méthode DELETE
-	 * le nom du fichier à supprimer sur le serveur FTP.
-	 * 
-	 * @return le code html du formulaire
-	 */
-	@GET
-	@Path("/del")
-	@Produces("text/html")
-	public String formDel(){
-		String html = "";
-		html += "<html><body>" +
-				"<h1>Suppresion de fichier</h1>" +
-				"<form action=delete method=\"DELETE\">" +
-				"Fichier à supprimer : <input name=\"file\" type=\"text\"/></br>" +
-				"<input type=\"submit\" value=\"Delete\"/> " +
-				"</form>" +
-				"</html></body";
-		
-		return html;
-	}
 
 	/**
-	 * Méthode permettant de supprimer un fichier sur le serveur
-	 * @param file
-	 * @return
+	 * Méthode permettant de supprimer un fichier sur le serveur.
+	 * 
+	 * @param file le fichier à supprimer
+	 * @return la phrase de retour du serveur FTP
 	 * @throws IOException
 	 */
-	@DELETE
+	@GET
 	@Path("/delete/{file}")
 	@Produces("text/html")
 	public String delete(@PathParam("file") String file) throws IOException{
-		System.out.println(file + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		client.rmd(file);
 		
 		return client.getReplyString();
