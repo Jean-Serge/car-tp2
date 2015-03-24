@@ -12,6 +12,7 @@ Exécution
 	+ http://localhost:8080/rest/api/test/ 			---------> authentification
 	+ http://localhost:8080/rest/api/test/list		---------> lister les fichiers disponibles
 	+ http://localhost:8080/rest/api/test/get/<filename>	---------> télécharger le fichier filename
+	+ http://localhost:8080/rest/api/test/delete/<filename> ---------> supprimer le fichier indiqué
 
 
 Travail Réalisé
@@ -19,6 +20,7 @@ Travail Réalisé
 + Implémentation de la commande FTP LIST grâce à la méthode GET de HTTP
 + Implémentation de la commande FTP GET grâce à la méthode GET de HTTP
 + Implémentation de l'authentification FTP (USER + PASS) grâce à la méthode POST de HTTP
++ Implémentation de la commande FTP RMD grâve à la méthode GET de HTTP
 
 + Début non-concluant d'implémentation de la commande RMD avec la méthode DELETE
 
